@@ -21,10 +21,6 @@ final class TaskListViewController: UITableViewController {
         fetchData()
     }
     
-    override func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
-        showAlert(withTitle: "Edit Task", andMessage: "Edit your task")
-    }
-    
     @objc private func addNewTask() {
         showAlert(withTitle: "New Task", andMessage: "What do you want to do?")
     }
@@ -133,6 +129,11 @@ private extension TaskListViewController {
 
 // MARK: - UITableViewDelegate
 extension TaskListViewController {
+    
+    override func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
+        showAlert(withTitle: "Edit Task", andMessage: "Edit your task")
+    }
+    
     override func tableView(
         _ tableView: UITableView,
         commit editingStyle: UITableViewCell.EditingStyle,
