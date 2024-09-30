@@ -8,8 +8,10 @@
 import UIKit
 
 final class TaskListViewController: UITableViewController {
+    
     private var taskList: [ToDoTask] = []
     private let cellID = "task"
+    private let storeManager = StorageManager.shared
 
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -19,16 +21,19 @@ final class TaskListViewController: UITableViewController {
         fetchData()
     }
     
+    override func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
+        showAlert(withTitle: "Edit Task", andMessage: "Edit your task")
+    }
+    
     @objc private func addNewTask() {
         showAlert(withTitle: "New Task", andMessage: "What do you want to do?")
     }
     
     private func fetchData() {
-        let appDelegate = UIApplication.shared.delegate as! AppDelegate
         let fetchRequest = ToDoTask.fetchRequest()
         
         do {
-            taskList = try appDelegate.persistentContainer.viewContext.fetch(fetchRequest)
+            taskList = try storeManager.persistentContainer.viewContext.fetch(fetchRequest)
         } catch {
             print(error)
         }
@@ -37,29 +42,49 @@ final class TaskListViewController: UITableViewController {
     private func showAlert(withTitle title: String, andMessage message: String) {
         let alert = UIAlertController(title: title, message: message, preferredStyle: .alert)
         let okAction = UIAlertAction(title: "OK", style: .default) { [unowned self] _ in
-            guard let inputText = alert.textFields?.first?.text, !inputText.isEmpty else { return }
-            save(inputText)
+            if title == "New Task" {
+                guard let inputText = alert.textFields?.first?.text, !inputText.isEmpty else { return }
+                save(inputText)
+            } else if title == "Edit Task" {
+                guard let inputText = alert.textFields?.first?.text, !inputText.isEmpty else { return }
+                guard let index = tableView.indexPathForSelectedRow else { return }
+                update(inputText, index: index.row)
+            }
         }
         let cancelAction = UIAlertAction(title: "Cancel", style: .destructive)
         alert.addAction(okAction)
         alert.addAction(cancelAction)
-        alert.addTextField { textField in
-            textField.placeholder = "New Task"
+        alert.addTextField { [unowned self] textField in
+            if title == "New Task" {
+                textField.placeholder = "New Task"
+            } else if title == "Edit Task" {
+                guard let index = tableView.indexPathForSelectedRow else { return }
+                textField.text = taskList[index.row].title
+                textField.placeholder = "Edit Task"
+            }
+            
         }
         present(alert, animated: true)
     }
     
     private func save(_ taskName: String) {
-        let appDelegate = UIApplication.shared.delegate as! AppDelegate
-        let task = ToDoTask(context: appDelegate.persistentContainer.viewContext)
+        let task = ToDoTask(context: storeManager.persistentContainer.viewContext)
         task.title = taskName
         taskList.append(task)
         
         let indexPath = IndexPath(row: taskList.count - 1, section: 0)
         tableView.insertRows(at: [indexPath], with: .automatic)
         
-        appDelegate.saveContext()
+        storeManager.saveContext()
     }
+    
+    private func update(_ taskName: String, index: Int) {
+        taskList[index].title = taskName
+        tableView.reloadData()
+        storeManager.saveContext()
+    }
+    
+    
 }
 
 // MARK: - UITableViewDataSource
@@ -103,5 +128,21 @@ private extension TaskListViewController {
         )
         
         navigationController?.navigationBar.tintColor = .white
+    }
+}
+
+// MARK: - UITableViewDelegate
+extension TaskListViewController {
+    override func tableView(
+        _ tableView: UITableView,
+        commit editingStyle: UITableViewCell.EditingStyle,
+        forRowAt indexPath: IndexPath
+    ) {
+        
+        if editingStyle == .delete {
+            storeManager.deleteContext(object: taskList[indexPath.row])
+            taskList.remove(at: indexPath.row)
+            tableView.deleteRows(at: [indexPath], with: .automatic)
+        }
     }
 }
