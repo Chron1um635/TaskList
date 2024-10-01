@@ -47,8 +47,8 @@ final class TaskListViewController: UITableViewController {
                     tableView.insertRows(at: [indexPath], with: .automatic)
                 }
             } else if title == "Edit Task" {
-                guard let inputText = alert.textFields?.first?.text, !inputText.isEmpty else { return }
                 guard let index = tableView.indexPathForSelectedRow else { return }
+                guard let inputText = alert.textFields?.first?.text, !inputText.isEmpty else { return }
                 storeManager.update(taskList[index.row], newName: inputText)
                 tableView.reloadRows(at: [index], with: .automatic)
             }
