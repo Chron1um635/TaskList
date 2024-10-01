@@ -41,6 +41,56 @@
 /* End PBXFrameworksBuildPhase section */
 
 /* Begin PBXGroup section */
+		2220A3632CAC089F0057C42A /* App */ = {
+			isa = PBXGroup;
+			children = (
+				A80708AC2BB5DACF00128186 /* AppDelegate.swift */,
+				A80708AE2BB5DACF00128186 /* SceneDelegate.swift */,
+				A80708BD2BB5DAD000128186 /* Info.plist */,
+			);
+			path = App;
+			sourceTree = "<group>";
+		};
+		2220A3642CAC08A90057C42A /* ViewControllers */ = {
+			isa = PBXGroup;
+			children = (
+				A80708B02BB5DACF00128186 /* TaskListViewController.swift */,
+			);
+			path = ViewControllers;
+			sourceTree = "<group>";
+		};
+		2220A3652CAC08B50057C42A /* Services */ = {
+			isa = PBXGroup;
+			children = (
+				2220A3602CAA9E750057C42A /* StorageManager.swift */,
+			);
+			path = Services;
+			sourceTree = "<group>";
+		};
+		2220A3662CAC08C90057C42A /* Factorys */ = {
+			isa = PBXGroup;
+			children = (
+				A80708C52BB5EAB200128186 /* FilledButtonFactory.swift */,
+			);
+			path = Factorys;
+			sourceTree = "<group>";
+		};
+		2220A3672CAC08D60057C42A /* Models */ = {
+			isa = PBXGroup;
+			children = (
+				A80708B52BB5DACF00128186 /* TaskList.xcdatamodeld */,
+			);
+			path = Models;
+			sourceTree = "<group>";
+		};
+		2220A3682CAC08E00057C42A /* Storyboards */ = {
+			isa = PBXGroup;
+			children = (
+				A80708BA2BB5DAD000128186 /* LaunchScreen.storyboard */,
+			);
+			path = Storyboards;
+			sourceTree = "<group>";
+		};
 		A80708A02BB5DACF00128186 = {
 			isa = PBXGroup;
 			children = (
@@ -60,15 +110,13 @@
 		A80708AB2BB5DACF00128186 /* TaskList */ = {
 			isa = PBXGroup;
 			children = (
-				A80708AC2BB5DACF00128186 /* AppDelegate.swift */,
-				A80708AE2BB5DACF00128186 /* SceneDelegate.swift */,
-				A80708B02BB5DACF00128186 /* TaskListViewController.swift */,
-				2220A3602CAA9E750057C42A /* StorageManager.swift */,
-				A80708C52BB5EAB200128186 /* FilledButtonFactory.swift */,
-				A80708B52BB5DACF00128186 /* TaskList.xcdatamodeld */,
+				2220A3632CAC089F0057C42A /* App */,
+				2220A3642CAC08A90057C42A /* ViewControllers */,
+				2220A3652CAC08B50057C42A /* Services */,
+				2220A3662CAC08C90057C42A /* Factorys */,
+				2220A3672CAC08D60057C42A /* Models */,
 				A80708B82BB5DAD000128186 /* Assets.xcassets */,
-				A80708BA2BB5DAD000128186 /* LaunchScreen.storyboard */,
-				A80708BD2BB5DAD000128186 /* Info.plist */,
+				2220A3682CAC08E00057C42A /* Storyboards */,
 			);
 			path = TaskList;
 			sourceTree = "<group>";
@@ -294,7 +342,7 @@
 				CURRENT_PROJECT_VERSION = 1;
 				DEVELOPMENT_TEAM = GBTTU32HS2;
 				GENERATE_INFOPLIST_FILE = YES;
-				INFOPLIST_FILE = TaskList/Info.plist;
+				INFOPLIST_FILE = TaskList/App/Info.plist;
 				INFOPLIST_KEY_UIApplicationSupportsIndirectInputEvents = YES;
 				INFOPLIST_KEY_UILaunchStoryboardName = LaunchScreen;
 				INFOPLIST_KEY_UIStatusBarStyle = UIStatusBarStyleLightContent;
@@ -326,7 +374,7 @@
 				CURRENT_PROJECT_VERSION = 1;
 				DEVELOPMENT_TEAM = GBTTU32HS2;
 				GENERATE_INFOPLIST_FILE = YES;
-				INFOPLIST_FILE = TaskList/Info.plist;
+				INFOPLIST_FILE = TaskList/App/Info.plist;
 				INFOPLIST_KEY_UIApplicationSupportsIndirectInputEvents = YES;
 				INFOPLIST_KEY_UILaunchStoryboardName = LaunchScreen;
 				INFOPLIST_KEY_UIStatusBarStyle = UIStatusBarStyleLightContent;

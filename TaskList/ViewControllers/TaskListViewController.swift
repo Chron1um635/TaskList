@@ -26,12 +26,13 @@ final class TaskListViewController: UITableViewController {
     }
     
     private func fetchData() {
-        let fetchRequest = ToDoTask.fetchRequest()
-        
-        do {
-            taskList = try storeManager.persistentContainer.viewContext.fetch(fetchRequest)
-        } catch {
-            print(error)
+        storeManager.fetchData { result in
+            switch result {
+            case .success(let tasks):
+                taskList = tasks
+            case .failure(let error):
+                showAlert(withTitle: "Oops", andMessage: error.localizedDescription)
+            }
         }
     }
     
@@ -40,11 +41,16 @@ final class TaskListViewController: UITableViewController {
         let okAction = UIAlertAction(title: "OK", style: .default) { [unowned self] _ in
             if title == "New Task" {
                 guard let inputText = alert.textFields?.first?.text, !inputText.isEmpty else { return }
-                save(inputText)
+                storeManager.create(inputText) { task in
+                    taskList.append(task)
+                    let indexPath = IndexPath(row: taskList.count - 1, section: 0)
+                    tableView.insertRows(at: [indexPath], with: .automatic)
+                }
             } else if title == "Edit Task" {
                 guard let inputText = alert.textFields?.first?.text, !inputText.isEmpty else { return }
                 guard let index = tableView.indexPathForSelectedRow else { return }
-                update(inputText, index: index.row)
+                storeManager.update(taskList[index.row], newName: inputText)
+                tableView.reloadRows(at: [index], with: .automatic)
             }
         }
         let cancelAction = UIAlertAction(title: "Cancel", style: .destructive)
@@ -62,24 +68,6 @@ final class TaskListViewController: UITableViewController {
         }
         present(alert, animated: true)
     }
-    
-    private func save(_ taskName: String) {
-        let task = ToDoTask(context: storeManager.persistentContainer.viewContext)
-        task.title = taskName
-        taskList.append(task)
-        
-        let indexPath = IndexPath(row: taskList.count - 1, section: 0)
-        tableView.insertRows(at: [indexPath], with: .automatic)
-        
-        storeManager.saveContext()
-    }
-    
-    private func update(_ taskName: String, index: Int) {
-        taskList[index].title = taskName
-        tableView.reloadData()
-        storeManager.saveContext()
-    }
-    
     
 }
 
